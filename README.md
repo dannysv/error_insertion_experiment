@@ -13,7 +13,7 @@ It is organized following a set of steps described bellow:
 	()
 		example command:
 			dinglehopper folder\_gt folder\_ocr --progress
-		Observation .- Dinglehopper have high memory usage requirement for few paragraph of texts 
+		Observation .- Dinglehopper has high memory usage requirement for few paragraph of texts 
 	- Use ocrEvaluation as option to replace dinglehopper
 	(https://github.com/impactcentre/ocrevalUAtion/)
 		- java -cp ocrevalUAtion-1.3.4.jar eu.digitisation.Main -gt ./gt_teseractpuc/ -ocr ./ochre_seq25_teseractpuc/ -o data_corrig_teseract/ochre_seq25.xml -ip -ic
