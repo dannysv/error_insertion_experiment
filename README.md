@@ -25,3 +25,7 @@ Warning
 	- the function removeall it used from the utils repository (https://github.com/dannysv/utils)
 	clone and change the folder name to mutils to skip the reference error with the utils script that alredy exist in the current project
 
+	- The script corrigir\_socrates\_filtro.py should be placed on the correct folder (classificador\_folha\_completo), this folder contains the dependencies as well as the bert models and other necessary tools
+
+	- The file requirements\_socrates.txt contains the list of dependencies for running the socrates script.
+
