@@ -1,0 +1,1 @@
+este artigo descreve o desenvolvimento de um projeto de pesquisa que visa a utilização da internet como apoio para disponibilizar material didático via rede. através da confecção de uma página protótipo colocar conceitos de usabilidade e ergonomia de interfaces em prática e em testes, oferecendo suporte à criação de sites para disciplinas universitárias.

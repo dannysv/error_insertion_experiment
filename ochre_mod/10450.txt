@@ -1,0 +1,1 @@
+nesra tese de mestrado pretende desenvolver-se um sistama antlcarjacking cam características autónomas e praticamente sem necessidade de intervenção por perte da utilizador . esse sistema incorpora regislo e contrato de acessos .

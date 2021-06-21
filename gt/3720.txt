@@ -1,0 +1,1 @@
+o objetivo é através de técnicas de data mining, descobrir correlações existentes entre  os parâmetros selecionados de uma base de dados de intervenções em poços de petróleo,  para então, poder estimar o tempo total de uma operação de perfuração ou completação  de um poço.

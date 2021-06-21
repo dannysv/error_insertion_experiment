@@ -1,0 +1,1 @@
+o processamento de imagem tem entre outras aplicações a melhoria a codificação o o reconhecimento depadrões , pode so citar como exemplos de áreas onde sa efectua essa aplicação : o diagnostico medico ( raios x , ressonância magnética , ultra som ) a detecção remota ( aviões a satélites ) e á geologia ( análise dados sonares e sísmocos ) .

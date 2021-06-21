@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    </head>
+    <body>
+        <h2>General results</h2>
+        <div>
+            <table border="1">
+                <tr>
+                    <td>CER</td><td>5,70</td>
+                </tr>
+                <tr>
+                    <td>WER</td><td>26,56</td>
+                </tr>
+                <tr>
+                    <td>WER (order independent)</td><td>21,95</td>
+                </tr>
+            </table>
+    </div>
+    </body>
+</html>

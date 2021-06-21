@@ -1,0 +1,1 @@
+nesta tese de mestrado pretende desenvolver-se um sistema anticarjacking com características autónomas e praticamente sem necessidade de intervenção por parte do utilizador. esse sistema incorpora registo e controlo de acessos.
