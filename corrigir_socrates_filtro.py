@@ -9,6 +9,7 @@ import sys, xmltodict
 import os.path
 import ktrain
 import string, re
+import glob
 from word_correction.word_correction import WordCorrection
 
 import argparse
@@ -47,6 +48,7 @@ def corrigir_line(line, corrector, predictor):
         pass
     return ' '.join(sents_new)
 
+
 def read_file(path):
     try:
         with codecs.open(path, 'r', encoding="utf-8") as f:
@@ -66,7 +68,7 @@ def read_file(path):
                 return None
         else:
             print(e)
-            return None
+            return None 
 
 def processar_onefile(pathin, pathout, txtfile, corrector, predictor):
     lines = read_file(os.path.join(pathin, txtfile))
@@ -80,6 +82,49 @@ def processar_onefile(pathin, pathout, txtfile, corrector, predictor):
         out.write(line_new+'\n')
     out.close()
 
+def folder_xml(folder, folderout, corrector, predictor):
+    files = glob.glob("{}/*.xml".format(folder))
+    for f, file in enumerate(files):
+        ini_file = time.time()
+        filename = file.split('/')[-1].split('\\')[-1].replace("error", "classificador")
+        if not os.path.isfile(folderout+"/"+filename):
+            print("{} - {} - Iniciado".format(f, filename))
+            with open(file, 'r', encoding='utf-8') as temp_f:
+                xml_doc = xmltodict.parse(temp_f.read())
+                new_xml = {
+                        'add':{
+                            'doc':[]
+                            }
+                        }
+                doc_erros = 0
+                for doc in xml_doc['add']['doc']:
+                    print("\t "+doc['field'][0]['#text'])
+                    new_doc = {'field':[]}
+
+                    for num_tag in range(len(doc['field'])):
+                        if doc['field'][num_tag]['@name'] == 'texto_erros':
+                            doc_erros += 1
+                            text = doc['field'][num_tag]['#text']
+                            final_sentence = corrigir_line(text, corrector, predictor)
+                            new_doc['field'].append({
+                                    '@name': "text",
+                                    '#text': final_sentence
+                                    })
+                        else:
+                            new_doc['field'].append({
+                                '@name': doc['field'][num_tag]['@name'],
+                                '#text': doc['field'][num_tag]['#text'] if doc['field'][num_tag]['#text'] else '',
+                                })
+                    new_xml['add']['doc'].append(new_doc)
+            result_xml = xmltodict.unparse(new_xml, pretty=True)
+            with open(folderout+"/"+filename, "w", encoding='utf-8') as out_file:
+                out_file.write(result_xml)
+            end_file = time.time()
+            tempo = end_file - ini_file
+            print("{} - {} - Concluído em {} sec, {} docs com erros, AVG {}\n".format(f, filename, tempo, doc_erros, (tempo/doc_erros))) 
+        else:
+            print("{} - {} já processado!\n".format(f, filename))
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser('scrip para correcao com ochre')
     parser.add_argument('--folderin', 
@@ -88,16 +133,21 @@ if __name__ == "__main__":
                         help='caminho para a pasta de entrada')
     parser.add_argument('--folderout', 
                         required=False,
-                        default='ochre_trie',
+                        default='classificador_filtro',
                         type=str,
-                        help='caminho para a pasta de saida')
-    
+                        help='caminho para a pasta de saida (sin / al final)')
+    parser.add_argument('--xml', 
+                        type=int,
+                        required=True,
+                        help='processar folder xml? (1 - si, otros - no)')
+
 
     # read args
     args = parser.parse_args()
     folderin=args.folderin 
     #it = args.it
     folderout=args.folderout 
+    xml = args.xml 
     if os.path.exists(folderout):
         pass
     else:#create
@@ -109,26 +159,31 @@ if __name__ == "__main__":
    
     # process files of a given folder
     if folderin is not None:
-        print('aqui')
-        if os.path.exists(folderin):
-            #listar os arquivos de txt
-            files = os.listdir(folderin)
-            print(files)
-            files = [f for f in files if str(f).endswith('.txt') and 'readme' not in str(f)]
-
-            if os.path.exists(folderout)==False:
-                os.mkdir(folderout)
-            #obter arquivos ja processados
-            files_ok = os.listdir(folderout)
-            #print("processar todos los archivos de una carpeta in folder: %s" %files)
-            for fil in tqdm.tqdm(files):
-                try:
-                    if fil not in files_ok:
-                        processar_onefile(folderin, folderout, fil, corrector, predictor)
-                    else:
-                        print("arquivo %s ja processado"%fil)
-                except Exception as e:
-                    print('error in %s'%fil)
-                    print(e)
+        if xml==1:
+            print('corregir xml')
+            folder_xml(folderin, folderout, corrector, predictor)
         else:
-            print("folder de entrada no existe")
+            print('corregir otros txt')
+            print('aqui')
+            if os.path.exists(folderin):
+                #listar os arquivos de txt
+                files = os.listdir(folderin)
+                print(files)
+                files = [f for f in files if str(f).endswith('.txt') and 'readme' not in str(f)]
+
+                if os.path.exists(folderout)==False:
+                    os.mkdir(folderout)
+                #obter arquivos ja processados
+                files_ok = os.listdir(folderout)
+                #print("processar todos los archivos de una carpeta in folder: %s" %files)
+                for fil in tqdm.tqdm(files):
+                    try:
+                        if fil not in files_ok:
+                            processar_onefile(folderin, folderout, fil, corrector, predictor)
+                        else:
+                            print("arquivo %s ja processado"%fil)
+                    except Exception as e:
+                        print('error in %s'%fil)
+                        print(e)
+            else:
+                print("folder de entrada no existe")
