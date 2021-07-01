@@ -34,7 +34,11 @@ def corrigir_sent(sentence, corrector, use_nltk):
         #print(t, word)
         valid_word, test = test_valid_word(word, t)
         if valid_word == True:
-            sent_mod.append(corrector.classify_input(word))
+            #sent_mod.append(corrector.classify_input(word))
+            suggestion = corrector.aspell_suggest(word)
+            if suggestion == "": #caso o aspell de erro, retornar apenas a mesma palavra
+                suggestion=word
+            sent_mod.append(suggestion)
         else:
             sent_mod.append(word)
     final_sentence = ' '.join(sent_mod)
